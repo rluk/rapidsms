@@ -9,6 +9,7 @@ import gettext
 # 
 # Read more about Django i18n: http://docs.djangoproject.com/en/dev/topics/i18n/
 # Read more about Python i18n: http://www.python.org/doc/2.5/lib/node733.html
+# Read more about RapidSMS i18n: http://docs.rapidsms.org/i18n.html
 
 # path to GNU gettext 'locale' directory
 LOCALE_PATH=os.path.join('contrib','locale')
