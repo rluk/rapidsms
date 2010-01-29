@@ -12,7 +12,6 @@ class Manager (object):
         router = Router()
         router.set_logger(conf["log"]["level"], conf["log"]["file"])
         router.info("RapidSMS Server started up")
-        import_i18n_sms_settings(conf)
         
         # add each application from conf
         for app_conf in conf["rapidsms"]["apps"]:
@@ -102,6 +101,7 @@ def start (args):
         # can't do it until env[RAPIDSMS_INI] is defined
         from rapidsms.webui import settings
         import_local_settings(settings, ini)
+        import_i18n_sms_settings(conf)
 
         # whatever we're doing, we'll need to call
         # django's setup_environ, to configure the ORM

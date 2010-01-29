@@ -128,13 +128,13 @@ def import_i18n_web_settings(conf):
         global RAPIDSMS_I18N
         RAPIDSMS_I18N = True
         if "default_language" in conf["i18n"]:
+            # retardedly, django unit tests fail if default language is set to non-latin character language
             global LANGUAGE_CODE
             LANGUAGE_CODE = conf["i18n"]["default_language"]
+        global LANGUAGES
         if "web_languages" in conf["i18n"]:
-            global LANGUAGES
             LANGUAGES = _i18n_to_django_setting( conf["i18n"]["web_languages"] )
         elif "languages" in conf["i18n"]:
-            global LANGUAGES
             LANGUAGES = _i18n_to_django_setting( conf["i18n"]["languages"] )
     
         # allow you to specify the static paths for translation files
