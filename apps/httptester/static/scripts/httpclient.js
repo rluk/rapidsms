@@ -8,11 +8,13 @@ $(document).ready(function(){
 
 function sendMsg() {
 	if ($('#phone').val().length > 0 && $('#message').val().length > 0) {
-		req = url + $('#phone').val() + "/" + escape($('#message').val());
-		$.getJSON(
-			req,
-			function (response) { if (response) {
-				snippet = '<tr class="in"><td class="phone">' + response.phone + '</td><td class="dir">&laquo;</td><td class="msg">' + decode(response.message) + '</td><td class="info">' + decode(response.message).length + ' characters</td></tr>';
+		$.post(
+			url, 
+			{ "number": $('#phone').val(), "message": escape($('#message').val()) }, 
+			function (response) { if (response) { // if Ajax call succeeds, execute this function
+				to_eval = "resp_dict = " + response
+				eval(to_eval)
+				snippet = '<tr class="in"><td class="phone">' + resp_dict.phone + '</td><td class="dir">&laquo;</td><td class="msg">' + unescape(resp_dict.message) + '</td><td class="info">' + resp_dict.message.length + ' characters</td></tr>';
 				$('#log').append(snippet);
 				fixClasses();
 				$('div.tester').scrollTo('#log tr:last', 800);
@@ -29,26 +31,15 @@ function fixClasses(){
 	$('#log tr:last').addClass('last');
 }
 
-function decode(str) {
-	str = str.replace(/%23/gi, "#");
-	str = str.replace(/%24/gi, "$");
-	str = str.replace(/%26/gi, "&");
-	str = str.replace(/%3D/gi, "=");
-	str = str.replace(/%3B/gi, ";");
-	str = str.replace(/%2C/gi, ",");
-	str = str.replace(/%3A/gi, ":");
-	str = str.replace(/%3F/gi, "?");
-	str = decodeURI(str);
-	return str;
-}
-
 function checkMsgs() {
 	if ($('#phone').val().length > 0) {
-		req = url + $('#phone').val() + "/json_resp";
-		$.getJSON(
-			req,
+		$.post(
+			url,
+			{ number: $('#phone').val(), message: "json_resp" }, 
 			function (response) { if (response) {
-				snippet = '<tr class="out"><td class="phone">' + response.phone + '</td><td class="dir">&raquo;</td><td class="msg">' + decode(response.message) + '</td><td class="info">' + decode(response.message).length + ' characters</td></tr>';
+				to_eval = "resp_dict = " + response
+				eval(to_eval)
+				snippet = '<tr class="out"><td class="phone">' + resp_dict.phone + '</td><td class="dir">&raquo;</td><td class="msg">' + resp_dict.message + '</td><td class="info">' + resp_dict.message.length + ' characters</td></tr>';
 				$('#log').append(snippet);
 				fixClasses();
 				$('div.tester').scrollTo('#log tr:last', 800);
